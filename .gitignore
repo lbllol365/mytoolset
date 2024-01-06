@@ -1,0 +1,9 @@
+build/bin
+node_modules
+frontend/dist
+/build/
+/frontend/.idea/
+/backend/db/foo.db
+/.idea
+/frontend/wailsjs/runtime/
+/frontend/wailsjs/
