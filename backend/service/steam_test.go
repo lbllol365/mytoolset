@@ -8,6 +8,6 @@ import (
 func TestGameSearchSuggest(t *testing.T) {
 	ctx := context.Background()
 	steamService := SteamService{ctx: ctx}
-	data := steamService.getGameSearchSuggest("cs")
+	data := steamService.GetGameSearchSuggest("cs")
 	t.Log(data)
 }
