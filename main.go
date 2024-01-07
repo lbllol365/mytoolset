@@ -3,7 +3,9 @@ package main
 import (
 	"changeme/backend/db"
 	"changeme/backend/service"
+	"context"
 	"embed"
+	"github.com/go-resty/resty/v2"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -15,8 +17,18 @@ var assets embed.FS
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
-	rssService := &service.RssService{}
-	steamService := &service.SteamService{}
+	ctx := context.TODO()
+	client := resty.New()
+	// TODO 代理可配置
+	client.SetProxy("http://127.0.0.1:1081")
+	client.SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0")
+	rssService := &service.RssService{
+		Ctx: ctx,
+	}
+	steamService := &service.SteamService{
+		Ctx:    ctx,
+		Client: client,
+	}
 	db.InitDB()
 	// Create application with options
 	err := wails.Run(&options.App{

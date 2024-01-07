@@ -7,7 +7,7 @@ import (
 )
 
 type RssService struct {
-	ctx context.Context
+	Ctx context.Context
 }
 
 func (r *RssService) PullData() (resp types.JSResp) {
