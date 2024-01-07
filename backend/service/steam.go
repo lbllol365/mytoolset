@@ -8,6 +8,7 @@ import (
 	"github.com/antchfx/htmlquery"
 	"github.com/go-resty/resty/v2"
 	"golang.org/x/net/html"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -86,6 +87,42 @@ func (s SteamService) GetGameDetailInfo(appid int) (resp types.JSResp) {
 	resp.Success = true
 	resp.Data = &detailData
 	return
+}
+
+// getWorkshopDataFromAppid 根据appid获取游戏创意工坊相关信息
+func (s SteamService) getWorkshopDataFromAppid(appid int) (workShopInfo WorkShopInfo) {
+	urlTemplate := "https://steamcommunity.com/app/%s/workshop?cc=CN&realm=1&l=schinese"
+	url := fmt.Sprintf(urlTemplate, strconv.Itoa(appid))
+	response, err := s.Client.R().Get(url)
+	if err != nil {
+		workShopInfo.Success = false
+		return
+	}
+	workShopInfo.Success = true
+	// 请求被重定向到商店首页，说明该游戏没有创意工坊
+	if response.StatusCode() == 302 {
+		workShopInfo.Have = false
+		return
+	}
+	itemNumRe := regexp.MustCompile("<span>查看所有.*</span>")
+	itemNum := itemNumRe.FindString(string(response.Body()))
+	if itemNum == "" {
+		workShopInfo.Success = false
+		return
+	}
+	numRe := regexp.MustCompile("[0-9|,]+")
+	num := numRe.FindString(itemNum)
+	workShopInfo.Have = true
+	workShopInfo.Num = num
+	workShopInfo.Link = url
+	return
+}
+
+type WorkShopInfo struct {
+	Success bool   // 请求是否成功
+	Have    bool   // 是否有创意工坊
+	Num     string // 创意工坊物品数量
+	Link    string // 创意工坊链接
 }
 
 type DetailInfo struct {

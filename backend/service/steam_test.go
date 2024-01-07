@@ -30,3 +30,9 @@ func TestGameDetailInfo(t *testing.T) {
 	data := service.GetGameDetailInfo(572220)
 	t.Log(data)
 }
+
+func TestGameWorkShopData(t *testing.T) {
+	initAll()
+	data := service.getWorkshopDataFromAppid(4000)
+	t.Log(data)
+}
