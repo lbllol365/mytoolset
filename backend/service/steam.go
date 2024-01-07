@@ -92,7 +92,7 @@ func (s SteamService) GetGameDetailInfo(appid int) (resp types.JSResp) {
 }
 
 // getWorkshopDataFromAppid 根据appid获取游戏创意工坊相关信息
-func (s SteamService) getWorkshopDataFromAppid(appid int) (workShopInfo WorkShopInfo) {
+func (s SteamService) getWorkshopDataByAppid(appid int) (workShopInfo WorkShopInfo) {
 	urlTemplate := "https://steamcommunity.com/app/%s/workshop?cc=CN&realm=1&l=schinese"
 	url := fmt.Sprintf(urlTemplate, strconv.Itoa(appid))
 	response, err := s.Client.R().Get(url)

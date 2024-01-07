@@ -35,7 +35,7 @@ func TestGameDetailInfo(t *testing.T) {
 
 func TestGameWorkShopData(t *testing.T) {
 	initAll()
-	data := service.getWorkshopDataFromAppid(4000)
+	data := service.getWorkshopDataByAppid(4000)
 	t.Log(data)
 }
 
