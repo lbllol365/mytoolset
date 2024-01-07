@@ -1,6 +1,7 @@
 package service
 
 import (
+	"changeme/backend/db"
 	"changeme/backend/types"
 	"context"
 	"encoding/json"
@@ -11,6 +12,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type SteamService struct {
@@ -115,6 +117,27 @@ func (s SteamService) getWorkshopDataFromAppid(appid int) (workShopInfo WorkShop
 	workShopInfo.Have = true
 	workShopInfo.Num = num
 	workShopInfo.Link = url
+	return
+}
+
+// AddFavorite 添加收藏
+func (s SteamService) AddFavorite(appid int) (resp types.JSResp) {
+	now := time.Now()
+	timeFormatted := now.Format("2006-01-02 15:04:05")
+	stm, err := db.DB.Prepare("insert into favorite(appid, add_time) values(?, ?)")
+	if err != nil {
+		resp.Success = false
+		resp.Msg = "添加收藏 SQL statement初始化失败"
+		return
+	}
+	defer stm.Close()
+	_, err = stm.Exec(strconv.Itoa(appid), timeFormatted)
+	if err != nil {
+		resp.Success = false
+		resp.Msg = "添加收藏 SQL执行失败"
+		return
+	}
+	resp.Success = true
 	return
 }
 

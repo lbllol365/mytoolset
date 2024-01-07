@@ -1,6 +1,7 @@
 package service
 
 import (
+	"changeme/backend/db"
 	"context"
 	"github.com/go-resty/resty/v2"
 	"testing"
@@ -17,6 +18,7 @@ func initAll() {
 			Client: client,
 		}
 	}
+	db.InitDB()
 }
 
 func TestGameSearchSuggest(t *testing.T) {
@@ -34,5 +36,11 @@ func TestGameDetailInfo(t *testing.T) {
 func TestGameWorkShopData(t *testing.T) {
 	initAll()
 	data := service.getWorkshopDataFromAppid(4000)
+	t.Log(data)
+}
+
+func TestAddFavorite(t *testing.T) {
+	initAll()
+	data := service.AddFavorite(4000)
 	t.Log(data)
 }
