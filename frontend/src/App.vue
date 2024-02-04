@@ -7,6 +7,7 @@ import {
   LogoRss as RssIcon,
   GameControllerOutline as GameControllerIcon,
   Alarm as AlarmIcon,
+  LogoDocker as DockerIcon
 } from "@vicons/ionicons5";
 
 function renderIcon(icon) {
@@ -67,6 +68,17 @@ const menuOptions = [
     ),
     key: "steam",
     icon: renderIcon(AlarmIcon)
+  },
+  {
+    label: () => h(
+        RouterLink,
+        {
+          to: {name: "docker"}
+        },
+        {default: () => "docker"}
+    ),
+    key: "docker",
+    icon: renderIcon(DockerIcon)
   },
 ];
 

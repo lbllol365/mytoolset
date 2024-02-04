@@ -29,6 +29,10 @@ func main() {
 		Ctx:    ctx,
 		Client: client,
 	}
+	clientService := &service.DockerService{
+		Ctx: ctx,
+	}
+	clientService.InitClient()
 	db.InitDB()
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -44,6 +48,7 @@ func main() {
 			app,
 			rssService,
 			steamService,
+			clientService,
 		},
 	})
 

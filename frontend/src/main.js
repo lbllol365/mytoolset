@@ -6,6 +6,7 @@ import tool1 from "./components/tool/tool1.vue";
 import tool2 from "./components/tool/tool2.vue";
 import ali213 from "./components/rss/ali213.vue";
 import steam from "./views/steam/index.vue";
+import docker from "./views/docker/index.vue"
 import { createDiscreteApi, darkTheme} from 'naive-ui'
 import {createPinia} from "pinia";
 
@@ -16,7 +17,8 @@ const routes = [
     { path: '/tool1', component: tool1, name: 'tool1' },
     { path: '/tool2', component: tool2, name: 'tool2' },
     {path: '/rss/ali213', component: ali213, name: 'ali213'},
-    {path: '/steam/index', component: steam, name: 'steam'}
+    {path: '/steam/index', component: steam, name: 'steam'},
+    {path: '/docker/index', component: docker, name: 'docker'}
 ]
 
 const router = createRouter({
