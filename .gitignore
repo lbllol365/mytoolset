@@ -7,3 +7,6 @@ frontend/dist
 /.idea
 /frontend/wailsjs/runtime/
 /frontend/wailsjs/
+/backend/service/foo.db
+/backend/db/sqlite-jdbc-3.42.0.1.jar
+/backend/db/sqlite-jdbc-3.44.1.0.jar
