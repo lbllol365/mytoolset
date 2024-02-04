@@ -141,6 +141,12 @@ func (s SteamService) AddFavorite(appid int) (resp types.JSResp) {
 	return
 }
 
+func (s SteamService) PullLatestDataByAppid(appidSlice []int) (resp types.JSResp) {
+	appidNum := len(appidSlice)
+	print(appidNum)
+	return
+}
+
 type WorkShopInfo struct {
 	Success bool   // 请求是否成功
 	Have    bool   // 是否有创意工坊
