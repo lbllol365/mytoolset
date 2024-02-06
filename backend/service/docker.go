@@ -1,6 +1,7 @@
 package service
 
 import (
+	"changeme/backend/config"
 	"changeme/backend/types"
 	"context"
 	types2 "github.com/docker/docker/api/types"
@@ -13,7 +14,7 @@ type DockerService struct {
 }
 
 func (s *DockerService) InitClient() (resp types.JSResp) {
-	apiClient, err := client.NewClientWithOpts(client.WithHost("http://192.168.0.102:2376"), client.WithVersion("1.41"))
+	apiClient, err := client.NewClientWithOpts(client.WithHost(config.Config.DockerConfig.Host), client.WithVersion("1.41"))
 	if err != nil {
 		resp.Success = false
 		resp.Msg = "初始化Docker客户端失败"

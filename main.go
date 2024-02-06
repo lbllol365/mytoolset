@@ -1,6 +1,7 @@
 package main
 
 import (
+	"changeme/backend/config"
 	"changeme/backend/db"
 	"changeme/backend/service"
 	"context"
@@ -19,8 +20,12 @@ func main() {
 	app := NewApp()
 	ctx := context.TODO()
 	client := resty.New()
-	// TODO 代理可配置
-	client.SetProxy("http://127.0.0.1:1081")
+	errConfig := config.LoadConfig()
+	// TODO 日志
+	if errConfig != nil {
+		panic("加载配置文件失败")
+	}
+	client.SetProxy(config.Config.ProxyConfig.Host)
 	client.SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0")
 	rssService := &service.RssService{
 		Ctx: ctx,

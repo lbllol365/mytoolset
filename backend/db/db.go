@@ -1,6 +1,7 @@
 package db
 
 import (
+	"changeme/backend/config"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
@@ -9,8 +10,7 @@ import (
 var DB *sql.DB
 
 func InitDB() {
-	// TODO DB自定义配置
-	db, err := sql.Open("sqlite3", "foo.db")
+	db, err := sql.Open("sqlite3", config.Config.DatabaseConfig.Location)
 	if err != nil {
 		log.Fatal("DB初始化失败")
 	}
