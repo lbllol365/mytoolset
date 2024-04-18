@@ -6,9 +6,10 @@ import tool1 from "./components/tool/tool1.vue";
 import tool2 from "./components/tool/tool2.vue";
 import ali213 from "./components/rss/ali213.vue";
 import steam from "./views/steam/index.vue";
-import docker from "./views/docker/index.vue"
+import docker from "./views/docker/image/index.vue"
 import { createDiscreteApi, darkTheme} from 'naive-ui'
 import {createPinia} from "pinia";
+import {PingClient} from "../wailsjs/go/service/DockerService.js";
 
 const pinia = createPinia()
 
@@ -18,7 +19,7 @@ const routes = [
     { path: '/tool2', component: tool2, name: 'tool2' },
     {path: '/rss/ali213', component: ali213, name: 'ali213'},
     {path: '/steam/index', component: steam, name: 'steam'},
-    {path: '/docker/index', component: docker, name: 'docker'}
+    {path: '/docker/image/index', component: docker, name: 'dockerImage'}
 ]
 
 const router = createRouter({
@@ -29,6 +30,7 @@ const router = createRouter({
 async function setupApp() {
     const app = createApp(App)
     await setupDiscreteApi();
+    setUpDockerClientStatusTimer();
     app.use(naive);
     app.use(pinia);
     app.use(router);
@@ -131,6 +133,21 @@ async function setupDiscreteApi() {
     })
     window.$message = setupMessage(message)
     window.$dialog = setupDialog(dialog)
+}
+
+// 初始化一个全局的Docker Client状态以及定时更新
+function setUpDockerClientStatusTimer() {
+    window.$dockerClientActive = false
+    window.$dockerClientStatusTimer = setInterval(() => {
+        PingClient().then((res) => {
+            let newStatus = res.success;
+            if(newStatus !== window.$dockerClientActive) {
+                window.$dockerClientActive = res.success;
+                let dockerStatusChangeEvent = new Event('dockerStatusChange');
+                window.dispatchEvent(dockerStatusChangeEvent);
+            }
+        })
+    })
 }
 
 setupApp()

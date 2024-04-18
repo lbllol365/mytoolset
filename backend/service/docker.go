@@ -5,6 +5,7 @@ import (
 	"changeme/backend/types"
 	"context"
 	types2 "github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 )
 
@@ -41,6 +42,7 @@ func (s *DockerService) PingClient() (resp types.JSResp) {
 	return
 }
 
+// ListImage 获取镜像列表
 func (s *DockerService) ListImage() (resp types.JSResp) {
 	imageList, err := s.Client.ImageList(s.Ctx, types2.ImageListOptions{
 		All: true,
@@ -52,5 +54,46 @@ func (s *DockerService) ListImage() (resp types.JSResp) {
 	}
 	resp.Success = true
 	resp.Data = &imageList
+	return
+}
+
+// ListContainer 获取容器列表
+func (s *DockerService) ListContainer() (resp types.JSResp) {
+	containerList, err := s.Client.ContainerList(s.Ctx, container.ListOptions{
+		All: true,
+	})
+	if err != nil {
+		resp.Success = false
+		resp.Msg = "获取容器列表失败"
+		return
+	}
+	resp.Success = true
+	resp.Data = &containerList
+	return
+}
+
+// StartContainer 启动指定容器
+func (s *DockerService) StartContainer(containerID string) (resp types.JSResp) {
+	err := s.Client.ContainerStart(s.Ctx, containerID, container.StartOptions{})
+	if err != nil {
+		resp.Success = false
+		resp.Msg = "启动指定容器失败"
+		return
+	}
+	resp.Success = true
+	return
+}
+
+// StopContainer 停止指定容器
+func (s *DockerService) StopContainer(containerID string, waitTimeout int) (resp types.JSResp) {
+	err := s.Client.ContainerStop(s.Ctx, containerID, container.StopOptions{
+		Timeout: &waitTimeout,
+	})
+	if err != nil {
+		resp.Success = false
+		resp.Msg = "停止指定容器失败"
+		return
+	}
+	resp.Success = true
 	return
 }

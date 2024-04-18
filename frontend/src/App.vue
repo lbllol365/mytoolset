@@ -73,11 +73,11 @@ const menuOptions = [
     label: () => h(
         RouterLink,
         {
-          to: {name: "docker"}
+          to: {name: "dockerImage"}
         },
-        {default: () => "docker"}
+        {default: () => "dockerImage"}
     ),
-    key: "docker",
+    key: "dockerImage",
     icon: renderIcon(DockerIcon)
   },
 ];

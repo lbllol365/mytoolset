@@ -20,7 +20,7 @@
 
 <script setup>
 import {onBeforeMount, ref, onBeforeUnmount} from "vue";
-import {ListImage, PingClient} from "../../../wailsjs/go/service/DockerService";
+import {ListImage, PingClient} from "../../../../wailsjs/go/service/DockerService.js";
 
 const columns = [
     {
@@ -38,6 +38,24 @@ const columns = [
     {
       title: '拉取时间',
       key: 'created'
+    },
+    {
+        title: '操作',
+        render(row) {
+          return h("div", [
+            h("n-button", {
+              props: {
+                type: "primary", size: "small"
+              },
+              on: {
+                click: () => {
+                  // TODO 调用后端接口
+                }
+              }
+            }, "删除"),
+
+          ])
+        }
     }
   ]
 
@@ -49,13 +67,14 @@ const columns = [
   const data = ref([])
   const dockerClientStatus = ref(false)
   const timer = ref(null)
+  const clientStatusChangeHandler = () => {
+    dockerClientStatus.value = window.$dockerClientActive
+  }
   onBeforeMount(() => {
     PingClient().then(result => {
       dockerClientStatus.value = result.success;
       if(dockerClientStatus) {
-        timer.value = setInterval(() => {
-          pingClient()
-        }, 3000)
+        window.addEventListener('dockerStatusChange', clientStatusChangeHandler)
         ListImage().then(result => {
           if(result.success) {
             data.value = result.data.reduce((pre, curr) => {
@@ -70,6 +89,8 @@ const columns = [
             }, []);
           }
         })
+      } else {
+          $message.error("Docker 客户端未连接");
       }
     })
 
